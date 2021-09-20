@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  api:
+    build: './api'
+    command: npm run start
+    restart: unless-stopped # перезапускать контейнер после того как упадет
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://api_db_mongo:27017/api
+    depends_on: #сервисы которые необходимо запустить раньше текущего
+      - api_db_mongo
+
+  auth:
+    build: './auth'
+    command: npm run start
+    restart: unless-stopped # перезапускать контейнер после того как упадет
+    ports:
+      - '3001:3001'
+    environment:
+      PORT: 3001
+      POSTGRES_HOST: '127.0.0.1'
+      POSTGRES_USER: postgres
+      POSTGRES_DB: docker_test
+      POSTGRES_PASSWORD: root
+      POSTGRES_PORT: 5432
+    depends_on: #сервисы которые необходимо запустить раньше текущего
+      - api_db_pg
+
+  api_db_mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_db:/data/db
+
+  api_db_pg:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_HOST: '127.0.0.1'
+      POSTGRES_USER: postgres
+      POSTGRES_DB: docker_test
+      POSTGRES_PASSWORD: root
+      POSTGRES_PORT: 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/db
+
+volumes:
+  mongo_db:
+  pgdata:

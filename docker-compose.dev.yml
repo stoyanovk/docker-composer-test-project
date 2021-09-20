@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  api:
+    command: npm run dev
+    volumes:
+      - ./api:/work/api
+
+  auth:
+    command: npm run dev
+    volumes:
+      - ./auth:/work/auth
