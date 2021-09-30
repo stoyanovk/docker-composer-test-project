@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  frontend:
+    tty: true # это и следующее свойство надо для того чтобы в докере нормально работал хот релодинг
+    stdin_open: true
+    command: npm start
+    volumes:
+      - ./frontend:/work/frontend
   api:
     command: npm run dev
     volumes:
