@@ -1,13 +1,20 @@
+import { useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
 function App() {
+  useEffect(() => {
+    fetch('/api/current-user')
+      .then(r => r.json())
+      .then(r => console.log(r))
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code>
+          <br />
         </p>
         <a
           className="App-link"

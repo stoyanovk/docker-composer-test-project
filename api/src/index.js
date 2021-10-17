@@ -1,37 +1,26 @@
 const app = require('express')()
-const {
-  PORT,
-  MONGO_URL
-  // POSTGRES_USER,
-  // POSTGRES_PASSWORD,
-  // POSTGRES_HOST,
-  // POSTGRES_PORT,
-  // POSTGRES_DB
-} = require('./config')
+const { PORT, MONGO_URL, AUTH_API_URL } = require('./config')
 const { connect } = require('./db')
 const Posts = require('./model/posts')
-console.log(MONGO_URL, 'MONGO_URL')
-// const dbPG = pgp({
-//   host: POSTGRES_HOST,
-//   port: POSTGRES_PORT,
-//   database: POSTGRES_DB,
-//   user: POSTGRES_USER,
-//   password: POSTGRES_PASSWORD
-// })
+const axios = require('axios')
 
 app.get('/', async (req, res) => {
-  res.send({ message: 'main' })
+  res.send({ message: 'main 11' })
+})
+
+app.get('/current-user', async (req, res) => {
+  try {
+    const { data } = await axios.get(`${AUTH_API_URL}/me`)
+    res.json(data)
+  } catch (e) {
+    res.send({ message: 'something went wrong', url: AUTH_API_URL })
+  }
 })
 
 app.get('/mongo', async (req, res) => {
   const posts = await Posts.find()
   console.log('mongo data')
   res.send({ message: 'data was gained from mongo', data: posts })
-})
-
-app.get('/pg', async (req, res) => {
-  const result = await db.one('SELECT $1 AS value', 123)
-  res.send({ message: 'data was gained postgres', data: [result] })
 })
 
 const db = connect(MONGO_URL)

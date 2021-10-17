@@ -1,9 +1,8 @@
 FROM node:12-alpine
 
-WORKDIR /work/api
+WORKDIR /work/auth
 
-# COPY package*.json ./
-COPY . .
+COPY package*.json ./
 
 RUN npm install
 

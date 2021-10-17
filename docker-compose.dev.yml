@@ -6,13 +6,17 @@ services:
     stdin_open: true
     command: npm start
     volumes:
-      - ./frontend:/work/frontend
+      - ./frontend/src:/work/frontend/src
   api:
     command: npm run dev
     volumes:
-      - ./api:/work/api
+      - ./api/src:/work/api/src
 
   auth:
     command: npm run dev
     volumes:
-      - ./auth:/work/auth
+      - ./auth/src:/work/auth/src
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf

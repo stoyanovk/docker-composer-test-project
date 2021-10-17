@@ -4,19 +4,16 @@ services:
   frontend:
     build: './frontend'
     command: serve -s build -l 3000
-    ports:
-      - '3000:3000'
     restart: unless-stopped
 
   api:
     build: './api'
     command: npm run start
     restart: unless-stopped # перезапускать контейнер после того как упадет
-    ports:
-      - '3001:3001'
     environment:
       PORT: 3001
       MONGO_URL: mongodb://api_db_mongo:27017/api
+      AUTH_API_URL: http://auth:3002/api
     depends_on: #сервисы которые необходимо запустить раньше текущего
       - api_db_mongo
 
@@ -24,8 +21,6 @@ services:
     build: './auth'
     command: npm run start
     restart: unless-stopped # перезапускать контейнер после того как упадет
-    ports:
-      - '3002:3002'
     environment:
       PORT: 3002
       POSTGRES_HOST: '127.0.0.1'
@@ -58,9 +53,11 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
     depends_on:
       - frontend
+      - api
+      - auth
 
 volumes:
   mongo_db:
