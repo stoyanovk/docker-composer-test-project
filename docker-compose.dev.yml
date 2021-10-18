@@ -2,6 +2,9 @@ version: '3'
 
 services:
   frontend:
+    build:
+      context: './frontend'
+      dockerfile: 'Dockerfile.dev'
     tty: true # это и следующее свойство надо для того чтобы в докере нормально работал хот релодинг
     stdin_open: true
     command: npm start

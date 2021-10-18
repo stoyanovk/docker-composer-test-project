@@ -2,7 +2,9 @@ version: '3'
 
 services:
   frontend:
-    build: './frontend'
+    build:
+      context: './frontend'
+      dockerfile: 'Dockerfile.prod'
     command: serve -s build -l 3000
     restart: unless-stopped
 
